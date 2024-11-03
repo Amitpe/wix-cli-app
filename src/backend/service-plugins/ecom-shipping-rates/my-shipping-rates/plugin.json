@@ -1,0 +1,7 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/ecom-shipping-rates.json",
+  "id": "9def8a0d-fd32-4d0f-bb8b-fa9aeb176963",
+  "name": "Shipping Rates Provider",
+  "description": "Short description about this shipping provider",
+  "fallbackDefinitionMandatory": false
+}

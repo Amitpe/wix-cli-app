@@ -10,3 +10,9 @@ npm-debug.log*
 # Misc
 .DS_Store
 out
+
+# IntelliJ project-specific files to ignore
+.idea/
+*.iml
+Project.xml
+codeStyleConfig
