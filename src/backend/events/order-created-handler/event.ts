@@ -16,7 +16,7 @@ orders.onOrderCreated(async (event) => {
         await specialOrdersDao.insert({
             orderId: event.entity._id!,
             shippingOptionCode: SPECIAL_SHIPPING_CODE,
-            deliveryAddress: event.entity.shippingInfo?.logistics?.shippingDestination?.address?.toString(),
+            deliveryAddress: JSON.stringify(event.entity.shippingInfo?.logistics?.shippingDestination?.address),
             shippingRate: event.entity.shippingInfo?.cost?.price?.amount
         });
     }

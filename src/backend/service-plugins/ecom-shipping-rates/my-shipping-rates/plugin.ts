@@ -8,7 +8,7 @@ shippingRates.provideHandlers({
         const cost: shippingRates.ShippingPrice = {price: '5', currency: 'USD'}
         const shippingOption: shippingRates.ShippingOption = {
             code: SPECIAL_SHIPPING_CODE,
-            title: 'My shipping option',
+            title: 'Special Shipping Option',
             cost: cost
         }
         const shippingRates: shippingRates.ShippingOption[] = [shippingOption];

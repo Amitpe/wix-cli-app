@@ -1,41 +1,8 @@
-import {appInstances} from "@wix/app-management";
-import {collections} from "@wix/data";
-import { auth } from "@wix/essentials";
-import {SPECIAL_ORDERS_COLLECTION_ID} from "../../common/constants";
+// appEventHandlers.ts
+import { appInstances } from "@wix/app-management";
+import {specialOrdersDao} from "../../dao/SpecialOrdersDao";
 
-
-appInstances.onAppInstanceInstalled(async (event) => {
+appInstances.onAppInstanceInstalled(async () => {
     console.log('Hello from App Instance Installed Event');
-    await createDataCollection();
+    await specialOrdersDao.createCollection();
 });
-
-async function createDataCollection() {
-    const collection: collections.DataCollection = {
-        _id: SPECIAL_ORDERS_COLLECTION_ID,
-        displayName: 'Special Orders',
-        fields: [
-            {
-                key: 'orderId',
-                type: collections.Type.TEXT
-            },
-            {
-                key: 'shippingOptionId',
-                type: collections.Type.TEXT
-            },
-            {
-                key: 'deliveryAddress',
-                type: collections.Type.TEXT
-            },
-            {
-                key: 'shippingRate',
-                type: collections.Type.TEXT
-            }
-        ]
-    }
-    try {
-        await auth.elevate(collections.createDataCollection)(collection);
-    } catch (error) {
-        console.log('Failed to create collection')
-        console.log(error)
-    }
-}
