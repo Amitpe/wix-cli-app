@@ -1,29 +1,23 @@
+// orderHandler.ts
 import {orders} from "@wix/ecom";
-import {items} from "@wix/data";
-import {auth} from "@wix/essentials";
-import {MY_CLI_APP_ID, SPECIAL_ORDERS_COLLECTION_ID, SPECIAL_SHIPPING_CODE} from "../../common/constants";
+import {MY_CLI_APP_ID, SPECIAL_SHIPPING_CODE} from "../../common/constants";
+import {specialOrdersDao} from "../../dao/SpecialOrdersDao";
 
-// Check if the order contain my special shipping option
-// If yes, insert an entry to the special order collection
+// Event handler to check if an order contains the special shipping option
 orders.onOrderCreated(async (event) => {
-    console.log('Hello from Order Created Event')
+    console.log('Hello from Order Created Event');
 
-    const selectedShippingOptionCode = event.entity.shippingInfo?.code
-    const carrierId = event.entity.shippingInfo?.carrierId
+    const shippingCarrierId = event.entity.shippingInfo?.carrierId;
+    const selectedShippingOptionCode = event.entity.shippingInfo?.code;
 
-    if (carrierId === MY_CLI_APP_ID && selectedShippingOptionCode === SPECIAL_SHIPPING_CODE) {
-        console.log('Found special shipping option on the order')
-        const item: items.InsertDataItemOptions = {
-            dataCollectionId: SPECIAL_ORDERS_COLLECTION_ID,
-            dataItem: {
-                data: {
-                    orderId: event.entity._id,
-                    shippingOptionId: 'special-orders',
-                    deliveryAddress: event.entity.shippingInfo?.logistics?.shippingDestination?.address,
-                    shippingRate: event.entity.shippingInfo?.cost?.price?.amount
-                },
-            }
-        }
-        await auth.elevate(items.insertDataItem)(item)
+    if (shippingCarrierId === MY_CLI_APP_ID && selectedShippingOptionCode === SPECIAL_SHIPPING_CODE) {
+        console.log('Found special shipping option on the order');
+
+        await specialOrdersDao.insert({
+            orderId: event.entity._id!,
+            shippingOptionCode: SPECIAL_SHIPPING_CODE,
+            deliveryAddress: event.entity.shippingInfo?.logistics?.shippingDestination?.address?.toString(),
+            shippingRate: event.entity.shippingInfo?.cost?.price?.amount
+        });
     }
 });
