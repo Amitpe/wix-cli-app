@@ -1,6 +1,7 @@
 import {appInstances} from "@wix/app-management";
 import {collections} from "@wix/data";
 import { auth } from "@wix/essentials";
+import {SPECIAL_ORDERS_COLLECTION_ID} from "../../common/constants";
 
 
 appInstances.onAppInstanceInstalled(async (event) => {
@@ -10,7 +11,7 @@ appInstances.onAppInstanceInstalled(async (event) => {
 
 async function createDataCollection() {
     const collection: collections.DataCollection = {
-        _id: 'special-orders',
+        _id: SPECIAL_ORDERS_COLLECTION_ID,
         displayName: 'Special Orders',
         fields: [
             {

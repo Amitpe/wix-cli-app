@@ -1,26 +1,20 @@
 import {orders} from "@wix/ecom";
 import {items} from "@wix/data";
-import { auth } from "@wix/essentials";
+import {auth} from "@wix/essentials";
+import {MY_CLI_APP_ID, SPECIAL_ORDERS_COLLECTION_ID, SPECIAL_SHIPPING_CODE} from "../../common/constants";
 
-
-// TODO refactor to Consts.ts
-const MY_CLI_APP_ID = 'aa3a54aa-4433-433a-94e8-7a34053dd1c7';
-
+// Check if the order contain my special shipping option
+// If yes, insert an entry to the special order collection
 orders.onOrderCreated(async (event) => {
-    // Check if the order contain my special shipping option
-    // If yes, add it to the special order collection
-
     console.log('Hello from Order Created Event')
-    console.log('Event is:\n ', event)
-
 
     const selectedShippingOptionCode = event.entity.shippingInfo?.code
     const carrierId = event.entity.shippingInfo?.carrierId
 
-    if (carrierId === MY_CLI_APP_ID && selectedShippingOptionCode === 'customShippingCode') {
-        console.log('Item is:\n ', event)
+    if (carrierId === MY_CLI_APP_ID && selectedShippingOptionCode === SPECIAL_SHIPPING_CODE) {
+        console.log('Found special shipping option on the order')
         const item: items.InsertDataItemOptions = {
-            dataCollectionId: 'special-orders',
+            dataCollectionId: SPECIAL_ORDERS_COLLECTION_ID,
             dataItem: {
                 data: {
                     orderId: event.entity._id,
