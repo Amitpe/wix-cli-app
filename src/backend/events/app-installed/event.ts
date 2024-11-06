@@ -1,15 +1,17 @@
 import {appInstances} from "@wix/app-management";
 import {collections} from "@wix/data";
+import { auth } from "@wix/essentials";
+
 
 appInstances.onAppInstanceInstalled(async (event) => {
-    console.log('App Instance Installed Event');
+    console.log('Hello from App Instance Installed Event');
     await createDataCollection();
 });
 
 async function createDataCollection() {
     const collection: collections.DataCollection = {
-        _id: 'custom-delivery-orders',
-        displayName: 'Custom Delivery Orders',
+        _id: 'special-orders',
+        displayName: 'Special Orders',
         fields: [
             {
                 key: 'orderId',
@@ -30,7 +32,7 @@ async function createDataCollection() {
         ]
     }
     try {
-        await collections.createDataCollection(collection);
+        await auth.elevate(collections.createDataCollection)(collection);
     } catch (error) {
         console.log('Failed to create collection')
         console.log(error)
